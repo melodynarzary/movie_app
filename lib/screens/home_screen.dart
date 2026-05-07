@@ -74,7 +74,7 @@ final List<Movie> movies = [
         "https://m.media-amazon.com/images/M/MV5BOTg4NTBiZDAtZTc0YS00NzZlLTg4Y2ItNGQ3M2ZlMDM5MWQzXkEyXkFqcGc@._V1_.jpg",
     releaseYear: "2015",
     description:
-        "Elliot, a brilliant but highly unstable young cyber-security engineer and vigilante hacker, becomes a key figure in a complex game of global dominance when he and his shadowy allies try to take down the corrupt corporation he is paid to protect.Elliot, a brilliant but highly unstable young cyber-security engineer and vigilante hacker, becomes a key figure in a complex game of global dominance when he and his shadowy allies try to take down the corrupt corporation he is paid to protect.",
+        "Elliot, a brilliant but highly unstable young cyber-security engineer and vigilante hacker, becomes a key figure in a complex game of global dominance when he and his shadowy allies try to take down the corrupt corporation he is paid to protect.",
     rating: 8.5,
     genres: ["Crime", "Drama", "Thriller"],
     director: "Sam Esmail",
@@ -89,15 +89,26 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Movies"), centerTitle: true),
+      appBar: AppBar(
+        title: const Text("Movies"),
+        centerTitle: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
         child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // columns in the grid
-            childAspectRatio: 0.7, // width to height ratio of each grid item
-            crossAxisSpacing: 10, // horizontal space between grid items
-            mainAxisSpacing: 10, // vertical space between grid items
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
           ),
           itemCount: movies.length,
           itemBuilder: (context, index) {
