@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/screens/home_screen.dart';
+import 'package:movie_app/screens/settings.dart';
+// ======== THEMEPROVIDER ===========
+import 'package:movie_app/providers/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  // runApp(const MyApp());
+  runApp(
+    // we create a ChangeNotifierProvider which will provide the ThemeProvider to the entire widget tree.
+    // This allows us to listen to changes in the theme mode and update the UI accordingly.
+    ChangeNotifierProvider(
+      create: (BuildContext context) {
+        return ThemeProvider();
+      },
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -16,21 +30,81 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // listen to theme changes using Provider
+    final themeProvider = context.watch<ThemeProvider>();
+
     return MaterialApp(
       title: 'Flutter Demo',
       // =============== LIGHT THEME =================
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
-        // add more theme properties like scaffoldBackgroundColor, colorScheme, appbarTheme, textTheme etc.
+
+        scaffoldBackgroundColor: AppColors.lightBackground,
+
+        colorScheme: ColorScheme.light(
+          primary: AppColors.accentRed,
+          secondary: Colors.deepPurple.shade100,
+          onSecondary: Colors.black,
+          surface: AppColors.lightSurface,
+        ),
+
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          centerTitle: true,
+        ),
+
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          bodyMedium: TextStyle(fontSize: 14),
+        ),
       ),
       // =============== DARK THEME =================
       darkTheme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
-        // add more theme properties like scaffoldBackgroundColor, colorScheme, appbarTheme, textTheme etc.
+
+        scaffoldBackgroundColor: AppColors.darkBackground,
+
+        colorScheme: ColorScheme.dark(
+          primary: AppColors.accentRed,
+          secondary: Colors.deepPurple,
+          onSecondary: Colors.white,
+          surface: AppColors.darkSurface,
+        ),
+
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.darkBackground,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+        ),
+
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+          bodyMedium: TextStyle(fontSize: 14, color: Colors.white70),
+        ),
+
+        cardTheme: CardThemeData(
+          color: AppColors.darkSurface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
       ),
-      home: HomeScreen(),
+      themeMode: themeProvider.themeMode, // set theme mode based on provider
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomeScreen(),
+        '/settings': (context) => const SettingsScreen(),
+      },
+
       debugShowCheckedModeBanner: false,
     );
   }
